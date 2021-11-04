@@ -92,6 +92,30 @@ module.exports = class Validations {
 			.validateAsync(data);
 	}
 
+	
+	static async GroupCreateValidation(data, CustomError) {
+		return await joi
+			.object({
+				time: joi
+					.string()
+					.min(5)
+					.required()
+					.error(new CustomError(400, "Time is invalid")),
+				status: joi
+					.string()
+					.valid("waiting", "studying", "finished", "closed")
+					.error(new CustomError(400, "Status is invalid")),
+				schedule: joi
+					.array()
+					.items(joi.number())
+					.error(new CustomError(400, "Days are invalid"))
+					.required(),
+				lesson_duration: joi.number().required(),
+				course_duration: joi.number().required()
+			})
+			.validateAsync(data);
+	}
+
 	static async AddApplicantValidation(data, CustomError) {
 		return await joi
 			.object({
